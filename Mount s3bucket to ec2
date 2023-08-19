@@ -1,0 +1,24 @@
+for temporary
+
+#!/bin/bash
+yum install epel-release -y
+yum install s3fs-fuse -y
+echo Secertkey:Accesskey > /root/.passwd-s3fs
+chmod 600 /root/.passwd-s3fs
+s3fs bucketname  mountpoint -o passwd_file=/root/.passwd-s3fs,nonempty
+
+
+for permanent
+
+#!/bin/bash
+yum install epel-release -y
+yum install s3fs-fuse -y
+echo Secetkey:Acesskey > /root/.passwd-s3fs
+chmod 600 /root/.passwd-s3fs
+
+sed -i '8 i s3fs#bucketname directory fuse nonempty,allow_other,use_cache=/tmp,url=https://s3.amazonaws.com 0 0' /etc/fstab
+
+sed -i 's/bucketname/fighter5/g' /etc/fstab
+sed -i 's/directory/mnt/g' /etc/fstab
+
+mount -a
